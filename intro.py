@@ -1,5 +1,5 @@
 alien = Actor('alien_resize')
-alien.topleft = 0, 40
+alien.topleft = 0, 0
 
 WIDTH = 800
 HEIGHT = 800
@@ -26,16 +26,14 @@ def on_key_down(key):
     row = int(alien.y / TILE_SIZE)
     column = int(alien.x / TILE_SIZE)
     print(row, column)
-    if key == keys.UP:
-        row = row - 1
-    if key == keys.DOWN:
-        row = row + 1
+    if key == keys.UP and alien.y > 0:
+        alien.y -= 40
+    if key == keys.DOWN and alien.y < 800:
+         alien.y += 40
     if key == keys.LEFT:
-        column = column - 1
+        alien.x -= 40
     if key == keys.RIGHT:
-        column = column + 1
-    alien.y = row * TILE_SIZE 
-    alien.x = column * TILE_SIZE 
+        alien.x += 40
     
 
 def set_alien_hurt():
