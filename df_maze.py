@@ -6,7 +6,7 @@ import time
 from colorama import init
 from colorama import Fore, Back, Style
 
-random.seed(12)
+
 
 ## Functions
 def printMaze(maze):

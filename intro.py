@@ -1,22 +1,20 @@
-alien = Actor('alien_resize')
-alien.topleft = 0, 40
-
 WIDTH = 800
 HEIGHT = 800
 
 TILE_SIZE = 40
+alien = Actor('alien_resize')
+alien.topleft = 0, 40
+
+
 from df_maze import give_maze
 import numpy as np
+import random
+
 
 maze = give_maze()
 where = np.where(maze == 1)
-#print(where)
-
 mazeSet = set((where[0][i],where[1][i]) for i in range(where[0].shape[0]))
-#print(mazeSet)
 
-RED = 200, 0, 0
-BOX = Rect((20, 20), (100, 100))
 
 
 
@@ -29,16 +27,102 @@ def draw():
     alien.draw()
 
 
-'''
-def update():
-    alien.left += 2
-    if alien.left > WIDTH:
-        #alien.right = 20
-'''
+def get_possible_directions():
+    #NOTATION [UP, LEFT, DOWN, RIGHT]
+    #UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3
+    row = int(alien.y / TILE_SIZE)
+    column = int(alien.x / TILE_SIZE)
 
+    UP = not (column,row - 1) in mazeSet and row > 0
+    LEFT = not (column-1,row) in mazeSet and column > 0
+    DOWN = not (column,row+1) in mazeSet and row < 19
+    RIGHT = not (column+1,row) in mazeSet and column < 19
+
+    return [UP,LEFT,DOWN,RIGHT]
+
+def policy(possible_directions):
+    #YOU WILL IMPLEMENT POLICY
+    #LEFT, RIGHT
+    #POLICY OUTPUTS A NUMBER 0,1,2,3 CORRESPONDING TO UP, LEFT, DOWN, RIGHT
+    UP = possible_directions[0]
+    LEFT = possible_directions[1]
+    DOWN = possible_directions[2]
+    RIGHT = possible_directions[3]
+
+
+    if RIGHT:
+        return 3
+    if DOWN:
+        return 2
+    if UP:
+        return 0
+    if LEFT:
+        return 1
+    
+    
+
+def execute_policy():
+    dir = get_possible_directions()
+    move = policy(dir)
+    print(move)
+    if move == 0:
+        move_up()
+    if move == 1:
+        move_left()
+    if move == 2:
+        move_down()
+    if move == 3:
+        move_right()
+
+def on_mouse_down(pos):
+    execute_policy()
+    
+
+
+
+def move_left():
+    row = int(alien.y / TILE_SIZE)
+    column = int(alien.x / TILE_SIZE)
+
+    new_row = row 
+    new_col = column - 1 
+
+    if not (new_col,new_row) in mazeSet and column > 0:
+        alien.x -= 40
+def move_right():
+    row = int(alien.y / TILE_SIZE)
+    column = int(alien.x / TILE_SIZE)
+
+    new_row = row
+    new_col = column + 1
+
+    if not (new_col,new_row) in mazeSet and column < 19:
+        alien.x += 40
+def move_up():
+    row = int(alien.y / TILE_SIZE)
+    column = int(alien.x / TILE_SIZE)
+
+    new_row = row - 1 
+    new_col = column 
+
+    if not (new_col,new_row) in mazeSet and row > 0:
+        alien.y -= 40
+def move_down():
+    row = int(alien.y / TILE_SIZE)
+    column = int(alien.x / TILE_SIZE)
+
+    new_row = row + 1
+    new_col = column 
+
+    if not (new_col,new_row) in mazeSet and row < 19:
+        alien.y += 40
+
+
+'''
 def on_mouse_down(pos):
     if alien.collidepoint(pos):
         set_alien_hurt()
+'''
 
 def on_key_down(key):
     # player movement
