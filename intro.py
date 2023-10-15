@@ -40,6 +40,7 @@ def get_possible_directions():
 
     return [UP,LEFT,DOWN,RIGHT]
 
+past_moves = [3]
 def policy(possible_directions):
     #YOU WILL IMPLEMENT POLICY
     #LEFT, RIGHT
@@ -64,15 +65,19 @@ def policy(possible_directions):
 def execute_policy():
     dir = get_possible_directions()
     move = policy(dir)
-    print(move)
+    #print(move)
     if move == 0:
         move_up()
+        past_moves.append(0)
     if move == 1:
         move_left()
+        past_moves.append(1)
     if move == 2:
         move_down()
+        past_moves.append(2)
     if move == 3:
         move_right()
+        past_moves.append(3)
 
 def on_mouse_down(pos):
     execute_policy()
