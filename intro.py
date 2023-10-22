@@ -1,9 +1,11 @@
-WIDTH = 800
-HEIGHT = 800
+import pgzrun
 
-TILE_SIZE = 40
+WIDTH = 800/2
+HEIGHT = 800/2
+
+TILE_SIZE = 40/2
 alien = Actor('alien_resize')
-alien.topleft = 0, 40
+alien.topleft = 0, 40/2
 
 
 from df_maze import give_maze
@@ -23,7 +25,7 @@ def draw():
     for i in range(20):
         for j in range(20):
             if maze[i,j] == 1:
-                screen.blit('maze', (i*40, j*40))
+                screen.blit('maze', (i*40/2, j*40/2))
     alien.draw()
 
 
@@ -45,23 +47,25 @@ def policy(possible_directions):
     #YOU WILL IMPLEMENT POLICY
     #LEFT, RIGHT
     #POLICY OUTPUTS A NUMBER 0,1,2,3 CORRESPONDING TO UP, LEFT, DOWN, RIGHT
+
     UP = possible_directions[0]
     LEFT = possible_directions[1]
     DOWN = possible_directions[2]
     RIGHT = possible_directions[3]
 
+    print(possible_directions)
 
+    retMe = 0
+    #THIS IS  WRONG
     if RIGHT:
         return 3
-    if DOWN:
-        return 2
     if UP:
         return 0
+    if DOWN:
+        return 2
     if LEFT:
         return 1
     
-    
-
 def execute_policy():
     dir = get_possible_directions()
     move = policy(dir)
@@ -82,9 +86,6 @@ def execute_policy():
 def on_mouse_down(pos):
     execute_policy()
     
-
-
-
 def move_left():
     row = int(alien.y / TILE_SIZE)
     column = int(alien.x / TILE_SIZE)
@@ -93,7 +94,7 @@ def move_left():
     new_col = column - 1 
 
     if not (new_col,new_row) in mazeSet and column > 0:
-        alien.x -= 40
+        alien.x -= 40/2
 def move_right():
     row = int(alien.y / TILE_SIZE)
     column = int(alien.x / TILE_SIZE)
@@ -102,7 +103,7 @@ def move_right():
     new_col = column + 1
 
     if not (new_col,new_row) in mazeSet and column < 19:
-        alien.x += 40
+        alien.x += 40/2
 def move_up():
     row = int(alien.y / TILE_SIZE)
     column = int(alien.x / TILE_SIZE)
@@ -111,7 +112,7 @@ def move_up():
     new_col = column 
 
     if not (new_col,new_row) in mazeSet and row > 0:
-        alien.y -= 40
+        alien.y -= 40/2
 def move_down():
     row = int(alien.y / TILE_SIZE)
     column = int(alien.x / TILE_SIZE)
@@ -120,7 +121,7 @@ def move_down():
     new_col = column 
 
     if not (new_col,new_row) in mazeSet and row < 19:
-        alien.y += 40
+        alien.y += 40/2
 
 
 '''
@@ -142,13 +143,13 @@ def on_key_down(key):
 
     if not (new_col,new_row) in mazeSet:
         if key == keys.UP and row > 0:
-            alien.y -= 40
+            alien.y -= 40/2
         if key == keys.DOWN and row < 19:
-            alien.y += 40
+            alien.y += 40/2
         if key == keys.LEFT and column > 0:
-            alien.x -= 40
+            alien.x -= 40/2
         if key == keys.RIGHT and column < 19:
-            alien.x += 40
+            alien.x += 40/2
     
 
 def set_alien_hurt():
@@ -160,7 +161,4 @@ def set_alien_hurt():
 def set_alien_normal():
     alien.image = 'alien_resize'
 
-
-
-
-
+pgzrun.go()
